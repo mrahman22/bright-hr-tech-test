@@ -9,4 +9,4 @@ npm install
 npm run dev
 ```
 
-Run `npm run typecheck` to check TypeScript or `npm run build` to type-check and create a production build.
+Run `npm run typecheck` to check TypeScript, `npm run build` to type-check and create a production build, or `npm run test` to run tests in watch mode.
