@@ -11,4 +11,17 @@ describe("DocumentList", () => {
 
     expect(screen.getByText("Public Holiday policy")).toBeInTheDocument();
   });
+  it("renders folders as clickable buttons", () => {
+    render(<DocumentList documents={userDocuments} />);
+
+    expect(
+      screen.getByRole("button", { name: "Expenses" }),
+    ).toBeInTheDocument();
+
+    expect(screen.getByRole("button", { name: "Misc" })).toBeInTheDocument();
+
+    expect(
+      screen.queryByRole("button", { name: "Employee Handbook" }),
+    ).not.toBeInTheDocument();
+  });
 });
