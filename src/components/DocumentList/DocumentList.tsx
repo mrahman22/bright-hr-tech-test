@@ -8,7 +8,13 @@ export const DocumentList = ({ documents }: IDocumentListProps) => {
   return (
     <ul>
       {documents.map((document) => (
-        <li key={document.name}>{document.name}</li>
+        <li key={document.name}>
+          {document.type === "folder" ? (
+            <button type="button">{document.name}</button>
+          ) : (
+            <span>{document.name}</span>
+          )}
+        </li>
       ))}
     </ul>
   );
