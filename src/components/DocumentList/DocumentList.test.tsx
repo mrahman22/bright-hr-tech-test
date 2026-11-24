@@ -96,4 +96,24 @@ describe("DocumentList", () => {
     expect(screen.getByText("Parent document")).toBeInTheDocument();
     expect(screen.queryByText("Nested document")).not.toBeInTheDocument();
   });
+  it("sorts documents alphabetically by name", async () => {
+    const user = userEvent.setup();
+
+    render(<DocumentList documents={userDocuments} />);
+
+    await user.click(screen.getByRole("button", { name: /sort by name/i }));
+
+    const documentNames = screen
+      .getAllByRole("row")
+      .slice(1)
+      .map((row) => row.querySelector("td")?.textContent?.trim());
+
+    expect(documentNames).toEqual([
+      "Cost centres",
+      "Employee Handbook",
+      "Expenses",
+      "Misc",
+      "Public Holiday policy",
+    ]);
+  });
 });
