@@ -1,4 +1,5 @@
 import type { DocumentItem } from "../../interfaces/user-documents";
+import { DocumentListRow } from "./components/DocumentListRow";
 
 interface IDocumentListProps {
   documents: DocumentItem[];
@@ -6,16 +7,54 @@ interface IDocumentListProps {
 
 export const DocumentList = ({ documents }: IDocumentListProps) => {
   return (
-    <ul>
-      {documents.map((document) => (
-        <li key={document.name}>
-          {document.type === "folder" ? (
-            <button type="button">{document.name}</button>
-          ) : (
-            <span>{document.name}</span>
-          )}
-        </li>
-      ))}
-    </ul>
+    <section className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6">
+      <header className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+            Documents
+          </h1>
+          <p className="mt-2 text-sm text-slate-500">
+            Access your company files and folders
+          </p>
+        </div>
+
+        <span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-600">
+          {documents.length} items
+        </span>
+      </header>
+
+      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+        <table className="w-full min-w-140 border-collapse text-left">
+          <thead className="bg-slate-50">
+            <tr className="border-b border-slate-200">
+              <th
+                scope="col"
+                className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500"
+              >
+                Name
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500"
+              >
+                Type
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500"
+              >
+                Date added
+              </th>
+            </tr>
+          </thead>
+
+          <tbody className="divide-y divide-slate-100">
+            {documents.map((document) => (
+              <DocumentListRow key={document.name} document={document} />
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
   );
 };
