@@ -1,4 +1,8 @@
-import type { DocumentItem } from "../../interfaces/user-documents";
+import { useState } from "react";
+import type {
+  DocumentItem,
+  IDocumentFolder,
+} from "../../interfaces/user-documents";
 import { DocumentListRow } from "./components/DocumentListRow";
 
 interface IDocumentListProps {
@@ -6,6 +10,13 @@ interface IDocumentListProps {
 }
 
 export const DocumentList = ({ documents }: IDocumentListProps) => {
+  const [currentDocuments, setCurrentDocuments] =
+    useState<DocumentItem[]>(documents);
+
+  const handleFolderClick = (folder: IDocumentFolder) => {
+    setCurrentDocuments(folder.files);
+  };
+
   return (
     <section className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6">
       <header className="mb-8 flex items-center justify-between">
@@ -19,7 +30,7 @@ export const DocumentList = ({ documents }: IDocumentListProps) => {
         </div>
 
         <span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-600">
-          {documents.length} items
+          {currentDocuments.length} items
         </span>
       </header>
 
@@ -49,8 +60,12 @@ export const DocumentList = ({ documents }: IDocumentListProps) => {
           </thead>
 
           <tbody className="divide-y divide-slate-100">
-            {documents.map((document) => (
-              <DocumentListRow key={document.name} document={document} />
+            {currentDocuments.map((document) => (
+              <DocumentListRow
+                key={document.name}
+                document={document}
+                onFolderClick={handleFolderClick}
+              />
             ))}
           </tbody>
         </table>

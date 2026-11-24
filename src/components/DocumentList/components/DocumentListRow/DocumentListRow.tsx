@@ -1,7 +1,11 @@
-import type { DocumentItem } from "../../../../interfaces/user-documents";
+import type {
+  DocumentItem,
+  IDocumentFolder,
+} from "../../../../interfaces/user-documents";
 
 interface DocumentListRowProps {
   document: DocumentItem;
+  onFolderClick: (folder: IDocumentFolder) => void;
 }
 
 const dateFormatter = new Intl.DateTimeFormat("en-GB", {
@@ -11,7 +15,10 @@ const dateFormatter = new Intl.DateTimeFormat("en-GB", {
   timeZone: "UTC",
 });
 
-export const DocumentListRow = ({ document }: DocumentListRowProps) => {
+export const DocumentListRow = ({
+  document,
+  onFolderClick,
+}: DocumentListRowProps) => {
   const isFolder = document.type === "folder";
 
   return (
@@ -28,6 +35,7 @@ export const DocumentListRow = ({ document }: DocumentListRowProps) => {
           {isFolder ? (
             <button
               type="button"
+              onClick={() => onFolderClick(document)}
               className="cursor-pointer text-left text-sm font-medium text-slate-800 hover:text-blue-600 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             >
               {document.name}
