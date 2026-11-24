@@ -40,4 +40,26 @@ describe("DocumentList", () => {
 
     expect(screen.queryByText("Employee Handbook")).not.toBeInTheDocument();
   });
+
+  it("allows users to navigate back to the root documents", async () => {
+    const user = userEvent.setup();
+
+    render(<DocumentList documents={userDocuments} />);
+
+    await user.click(screen.getByRole("button", { name: "Expenses" }));
+
+    expect(screen.getByText("Expenses claim form")).toBeInTheDocument();
+
+    expect(screen.queryByText("Employee Handbook")).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Back" }));
+
+    expect(screen.getByText("Employee Handbook")).toBeInTheDocument();
+
+    expect(
+      screen.getByRole("button", { name: "Expenses" }),
+    ).toBeInTheDocument();
+
+    expect(screen.queryByText("Expenses claim form")).not.toBeInTheDocument();
+  });
 });
