@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { DocumentList } from "./DocumentList";
 import { userDocuments } from "../../data/user-documents";
@@ -23,5 +24,20 @@ describe("DocumentList", () => {
     expect(
       screen.queryByRole("button", { name: "Employee Handbook" }),
     ).not.toBeInTheDocument();
+  });
+  it("displays the contents of a folder when clicked", async () => {
+    const user = userEvent.setup();
+
+    render(<DocumentList documents={userDocuments} />);
+
+    expect(screen.queryByText("Expenses claim form")).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Expenses" }));
+
+    expect(screen.getByText("Expenses claim form")).toBeInTheDocument();
+
+    expect(screen.getByText("Fuel allowances")).toBeInTheDocument();
+
+    expect(screen.queryByText("Employee Handbook")).not.toBeInTheDocument();
   });
 });
