@@ -106,7 +106,9 @@ describe("DocumentList", () => {
     const documentNames = screen
       .getAllByRole("row")
       .slice(1)
-      .map((row) => row.querySelector("td")?.textContent?.trim());
+      .map((row) =>
+        row.querySelector("td > div")?.lastElementChild?.textContent?.trim(),
+      );
 
     expect(documentNames).toEqual([
       "Cost centres",
