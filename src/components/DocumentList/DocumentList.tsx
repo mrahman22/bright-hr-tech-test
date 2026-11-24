@@ -10,28 +10,29 @@ interface IDocumentListProps {
 }
 
 export const DocumentList = ({ documents }: IDocumentListProps) => {
-  const [currentDocuments, setCurrentDocuments] =
-    useState<DocumentItem[]>(documents);
-
-  const [isRoot, setIsRoot] = useState(true);
+  const [folderPath, setFolderPath] = useState<IDocumentFolder[]>([]);
+  const currentDocuments = folderPath.at(-1)?.files ?? documents;
+  const isRoot = folderPath.length === 0;
 
   const handleFolderClick = (folder: IDocumentFolder) => {
-    setCurrentDocuments(folder.files);
-    setIsRoot(false);
+    setFolderPath((path) => [...path, folder]);
   };
 
   const handleBack = () => {
-    setCurrentDocuments(documents);
-    setIsRoot(true);
+    setFolderPath((path) => path.slice(0, -1));
   };
 
   return (
     <section className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6">
       <header className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-            Documents
-          </h1>
+        <div className="text-left">
+          <nav aria-label="Folder location" className="text-black font-bold">
+            <span>Documents</span>
+            {folderPath.map((folder, index) => (
+              <span key={index}> / {folder.name}</span>
+            ))}
+          </nav>
+
           <p className="mt-2 text-sm text-slate-500">
             Access your company files and folders
           </p>
@@ -46,7 +47,7 @@ export const DocumentList = ({ documents }: IDocumentListProps) => {
           <button
             type="button"
             onClick={handleBack}
-            className="cursor-pointer text-sm font-medium bg-gray-400 py-1 px-3 rounded-md  hover:text-blue-700 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            className="cursor-pointer rounded-md border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
           >
             Back
           </button>

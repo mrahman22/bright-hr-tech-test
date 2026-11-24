@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { DocumentList } from "./DocumentList";
 import { userDocuments } from "../../data/user-documents";
+import type { DocumentItem } from "../../interfaces/user-documents";
 
 describe("DocumentList", () => {
   it("displays the names of the documents", () => {
@@ -61,5 +62,38 @@ describe("DocumentList", () => {
     ).toBeInTheDocument();
 
     expect(screen.queryByText("Expenses claim form")).not.toBeInTheDocument();
+  });
+  it("returns to the parent folder when navigating back from a nested folder", async () => {
+    const user = userEvent.setup();
+    const documents: DocumentItem[] = [
+      {
+        type: "folder",
+        name: "Parent folder",
+        files: [
+          {
+            type: "folder",
+            name: "Nested folder",
+            files: [
+              { type: "doc", name: "Nested document", added: "2024-01-01" },
+            ],
+          },
+          { type: "pdf", name: "Parent document", added: "2024-01-02" },
+        ],
+      },
+    ];
+
+    render(<DocumentList documents={documents} />);
+
+    await user.click(screen.getByRole("button", { name: "Parent folder" }));
+    await user.click(screen.getByRole("button", { name: "Nested folder" }));
+    expect(screen.getByText("Nested document")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Back" }));
+
+    expect(
+      screen.getByRole("button", { name: "Nested folder" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Parent document")).toBeInTheDocument();
+    expect(screen.queryByText("Nested document")).not.toBeInTheDocument();
   });
 });
